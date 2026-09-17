@@ -1,7 +1,0 @@
-name = "jsp000399_parametric"
-version = "0.1.0"
-defaultTargets = ["JSP000399"]
-
-[[lean_lib]]
-name = "JSP000399"
-roots = ["JSP000399"]
