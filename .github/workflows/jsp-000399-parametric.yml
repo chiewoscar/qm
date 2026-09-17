@@ -14,10 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Unpack isolated Lean package
-        run: |
-          mkdir -p proofs/jsp-000399-parametric
-          base64 -d proofs/jsp000399-ci.tar.gz.b64 | tar -xz -C proofs/jsp-000399-parametric
       - name: Build and independently check Lean environment
         uses: leanprover/lean-action@v1
         env:
