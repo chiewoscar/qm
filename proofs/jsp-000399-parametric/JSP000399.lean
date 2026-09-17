@@ -58,30 +58,13 @@ theorem pairSums_perm_parametric (a b c : Nat) :
 theorem leftFamily_nodup {a b c : Nat}
     (ha : 0 < a) (hab : a < b) (hbc : b < c) :
     (leftFamily a b c).Nodup := by
-  have h0ab : 0 ≠ a + b := by omega
-  have h0ac : 0 ≠ a + c := by omega
-  have h0bc : 0 ≠ b + c := by omega
-  have habac : a + b ≠ a + c := by omega
-  have habbc : a + b ≠ b + c := by omega
-  have hacbc : a + c ≠ b + c := by omega
-  have hab' : a ≠ b := by omega
-  have hbc' : b ≠ c := by omega
-  simp [leftFamily, h0ab, h0ac, h0bc, habac, habbc, hacbc, hab', hbc']
+  simp [leftFamily] <;> omega
 
 /-- Under `0 < a < b < c`, the right list represents a four-element set. -/
 theorem rightFamily_nodup {a b c : Nat}
     (ha : 0 < a) (hab : a < b) (hbc : b < c) :
     (rightFamily a b c).Nodup := by
-  have hab' : a ≠ b := by omega
-  have hac : a ≠ c := by omega
-  have hasum : a ≠ a + b + c := by omega
-  have hbc' : b ≠ c := by omega
-  have hbsum : b ≠ a + b + c := by omega
-  have hcsum : c ≠ a + b + c := by omega
-  have h0a : a ≠ 0 := by omega
-  have h0b : b ≠ 0 := by omega
-  have h0c : c ≠ 0 := by omega
-  simp [rightFamily, hab', hac, hasum, hbc', hbsum, hcsum, h0a, h0b, h0c]
+  simp [rightFamily] <;> omega
 
 /-- The two represented sets are different: zero lies only on the left. -/
 theorem leftFamily_not_same_elements {a b c : Nat}
@@ -90,11 +73,8 @@ theorem leftFamily_not_same_elements {a b c : Nat}
   intro hsame
   have hzeroLeft : 0 ∈ leftFamily a b c := by simp [leftFamily]
   have hzeroRight : 0 ∈ rightFamily a b c := (hsame 0).mp hzeroLeft
-  have h0a : (0 : Nat) ≠ a := by omega
-  have h0b : (0 : Nat) ≠ b := by omega
-  have h0c : (0 : Nat) ≠ c := by omega
-  have h0sum : (0 : Nat) ≠ a + b + c := by omega
-  simpa [rightFamily, h0a, h0b, h0c, h0sum] using hzeroRight
+  simp [rightFamily] at hzeroRight
+  omega
 
 /-- A three-parameter family of genuine counterexamples to unique recovery
 from the multiset of two-element subset sums. -/
