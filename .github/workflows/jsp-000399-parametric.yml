@@ -1,0 +1,46 @@
+name: Verify JSP-000399 parametric proof
+
+on:
+  push:
+    branches:
+      - proof/jsp-000399-parametric
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack isolated Lean package
+        run: |
+          mkdir -p proofs/jsp-000399-parametric
+          base64 -d proofs/jsp000399-ci.tar.gz.b64 | tar -xz -C proofs/jsp-000399-parametric
+      - name: Build and independently check Lean environment
+        uses: leanprover/lean-action@v1
+        env:
+          LEAN_NUM_THREADS: "1"
+        with:
+          lake-package-directory: proofs/jsp-000399-parametric
+          build: true
+          test: false
+          lint: false
+          use-mathlib-cache: false
+          leanchecker: true
+          leanchecker-args: JSP000399
+          nanoda: true
+          nanoda-allow-sorry: false
+          axiom-audit: true
+          axiom-audit-root: JSP000399
+          axiom-audit-allow: propext,Classical.choice,Quot.sound
+      - name: Run package verifier and axiom printout
+        working-directory: proofs/jsp-000399-parametric
+        run: python3 scripts/verify.py --clean
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsp-000399-verification
+          path: proofs/jsp-000399-parametric/verification/
